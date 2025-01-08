@@ -3,13 +3,11 @@ package services
 import (
 	"github.com/devenock/romax-backend/internals/models"
 	"github.com/devenock/romax-backend/internals/repositories"
-	"math/rand"
-	"time"
+	"github.com/devenock/romax-backend/utils"
 )
 
 func PlayGame(player *models.Player) (*models.Game, error) {
-	rand.Seed(time.Now().UnixNano())
-	clearCount := rand.Intn(8)
+	clearCount := utils.GenerateRandomNumber(0, 7)
 
 	result := "loss"
 	freeGames := 0
