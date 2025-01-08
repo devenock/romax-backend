@@ -19,22 +19,33 @@ func main() {
 
 	// game route
 	app.Get("/game/result", func(c *fiber.Ctx) error {
+		// Simulate clearing symbols
 		rand.Seed(time.Now().UnixNano())
-		result := "lose"
-		if rand.Intn(2) == 1 { // 50% chance to win
+		clearCount := rand.Intn(8) // Random number of clears (0 to 7)
+
+		// Determine the result based on clears
+		result := "loss"
+		freeGames := 0
+		if clearCount >= 4 {
 			result = "win"
+			switch clearCount {
+			case 4:
+				freeGames = 3
+			case 5:
+				freeGames = 5
+			case 6:
+				freeGames = 10
+			case 7:
+				freeGames = 20
+			}
 		}
 
-		// Random win amount (if win occurs)
-		winAmount := 0
-		if result == "win" {
-			winAmount = rand.Intn(100) + 1 // Random win between 1 and 100
-		}
-
+		// Response
 		return c.JSON(fiber.Map{
 			"status":    "success",
 			"result":    result,
-			"winAmount": winAmount,
+			"clears":    clearCount,
+			"freeGames": freeGames,
 		})
 	})
 
